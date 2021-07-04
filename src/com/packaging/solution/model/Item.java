@@ -1,5 +1,7 @@
 package com.packaging.solution.model;
 
+import java.util.Objects;
+
 public class Item {
     private int number;
     private double weight;
@@ -32,5 +34,13 @@ public class Item {
     @Override
     public String toString() {
         return "[" + number + ", " + weight + ", " + cost + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return number == item.number;
     }
 }
