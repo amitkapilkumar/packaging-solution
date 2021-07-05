@@ -1,5 +1,6 @@
 package com.packaging.solution.processor;
 
+import com.packaging.solution.exception.InvalidCaseException;
 import com.packaging.solution.model.Case;
 import com.packaging.solution.model.Combination;
 import com.packaging.solution.model.Item;
@@ -14,19 +15,27 @@ import java.util.stream.Stream;
 public class SolutionAnalyzer {
     public String getSolution(Case aCase) {
         if(aCase.getTotalWeight() > 100) { // As per criteria, Maximum weight of the package should 100 or less
-            return "-";
+            throw new InvalidCaseException("Maximum weight of the package should 100 or less");
         }
 
         Map<Integer, Item> includedItems = new HashMap<>();
         for(Item item : aCase.getItems()) {
-            if((item.getCost() <= 100 && item.getWeight() <= 100 && item.getWeight() <= aCase.getTotalWeight())) {
+            if(item.getCost() > 100) {
+                throw new InvalidCaseException("Item cost should be 100 or less");
+            }
+
+            if(item.getWeight() > 100) {
+                throw new InvalidCaseException("Item weight should be 100 or less");
+            }
+
+            if(item.getWeight() <= aCase.getTotalWeight()) {
                 includedItems.put(item.getNumber(), item);
             }
         }
 
         int[] array = includedItems.keySet().stream().mapToInt(Number::intValue).toArray();
         List<String> combinations = new ArrayList<>();
-        int l = array.length-1;
+        int l = array.length;
         while (l > 0) {
             populateCombinations(array, array.length, l, combinations);
             l--;
@@ -42,7 +51,8 @@ public class SolutionAnalyzer {
                     buffer = combination;
                 }
                 else {
-                    if(combination.getTotalCost() > buffer.getTotalCost()) {
+                    if((combination.getTotalCost() > buffer.getTotalCost()) ||
+                            (combination.getTotalCost() == buffer.getTotalCost() && combination.getTotalWeight() < buffer.getTotalWeight())) {
                         buffer = combination;
                         result = combinationStr;
                     }
