@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class PackagingProcessor {
     public void parseItems(File file) throws IOException {
@@ -23,17 +22,13 @@ public class PackagingProcessor {
             else {
                 Case aCase = testCase(line);
                 System.out.println(aCase);
-                List<String> result = new SolutionAnalyzer().getSolution(aCase);
-                if(result.isEmpty()) {
-                    System.out.println("Output : -");
-                }
-                else {
-                    System.out.println("Output : " + String.join(",", result));
-                }
+                String result = new SolutionAnalyzer().getSolution(aCase);
+                System.out.println("Output : " + result);
             }
         }
-
     }
+
+
 
     private boolean isBlank(String line) {
         return line.trim().length() == 0;
