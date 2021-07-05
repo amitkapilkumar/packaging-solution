@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class SolutionAnalyzer {
+
     public String getSolution(Case aCase) {
         if(aCase.getTotalWeight() > 100) { // As per criteria, Maximum weight of the package should 100 or less
             throw new InvalidCaseException("Maximum weight of the package should 100 or less");
